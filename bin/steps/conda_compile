@@ -8,13 +8,28 @@ if [ ! -d /app/.heroku/miniconda ]; then
 fi
 
 echo "nomkl" > $HOME/.heroku/miniconda/conda-meta/pinned
-echo "added pinned file in $HOME/.heroku/miniconda/conda-meta/pinned"
+puts-step "added pinned file in $HOME/.heroku/miniconda/conda-meta/pinned"
 conda install nomkl
 
-
 if [ -f conda-requirements.txt ]; then
-    puts-step "Installing dependencies using Conda"
-    conda install --file conda-requirements.txt --yes | indent
+   # This step will cause us to use newer package channels and get updated
+   # libraries
+   puts-step "Updating conda..." | indent
+   conda update conda --yes | indent
+
+   # This step is necessary because Anaconda recently removed the pkgs/free
+   # from the list of default channels. Because this script pulls down
+   # the latest miniconda, as of 4.7, this will break for dependencies that
+   # older and possibly not included in the pkgs/main channel. For example,
+   # pandas-0.19.2 is not available in pkgs/main, but is available in pkgs/main,
+   # so a build that depends on this version of the package will fail.
+   #
+   # See: https://www.anaconda.com/why-we-removed-the-free-channel-in-conda-4-7/
+   puts-step "Allowing free packages..." | indent
+   conda config --set restore_free_channel true
+
+   puts-step "Installing dependencies using Conda"
+   conda install --file conda-requirements.txt --yes | indent
 fi
 
 if [ -f requirements.txt ]; then
