@@ -15,7 +15,7 @@ if [ -f conda-requirements.txt ]; then
    # This step will cause us to use newer package channels and get updated
    # libraries
    puts-step "Updating conda..." | indent
-   conda update conda --yes | indent
+   conda update -n root conda --yes | indent
 
    # This step is necessary because Anaconda recently removed the pkgs/free
    # from the list of default channels. Because this script pulls down
