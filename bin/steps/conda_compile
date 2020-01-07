@@ -1,3 +1,7 @@
+if [ -d /app/.heroku/miniconda ]; then
+  rm -fR /app/.heroku/miniconda
+fi
+
 if [ ! -d /app/.heroku/miniconda ]; then
     puts-step "Preparing Python/Miniconda Environment"
     curl -Os https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh
