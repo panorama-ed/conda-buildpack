@@ -1,7 +1,7 @@
 if [ ! -d /app/.heroku/miniconda ]; then
     puts-step "Preparing Python/Miniconda Environment"
-    curl -Os https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh
-    bash Miniconda-latest-Linux-x86_64.sh  -p /app/.heroku/miniconda/ -b | indent
+    curl -Os https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
+    bash Miniconda2-latest-Linux-x86_64.sh -p /app/.heroku/miniconda/ -b | indent
     rm -fr Miniconda-latest-Linux-x86_64.sh
 
     conda install pip --yes | indent
@@ -15,7 +15,7 @@ if [ -f conda-requirements.txt ]; then
    # This step will cause us to use newer package channels and get updated
    # libraries
    puts-step "Updating conda..." | indent
-   conda update conda --yes | indent
+   conda update -n base conda --yes | indent
 
    # This step is necessary because Anaconda recently removed the pkgs/free
    # from the list of default channels. Because this script pulls down
